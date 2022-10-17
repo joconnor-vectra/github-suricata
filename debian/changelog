@@ -1,0 +1,23 @@
+suricata (7.0.0-0vectra02) oop; urgency=medium
+
+  * Add no-start to suricata service dh_installsystemd
+
+ -- cfortman <cfortman@vectra.ai>  Thu, 13 Oct 2022 11:04:00 +0400
+
+suricata (7.0.0-0vectra01) oop; urgency=medium
+
+  * Initial packaging changes to suricata
+
+ -- cfortman <cfortman@vectra.ai>  Tue, 04 Oct 2022 10:16:00 +0400
+
+suricata (7.0.0-0vectra0) oop; urgency=medium
+
+  * Jack did this.
+
+ -- joconnor <joconnor@vectra.ai>  Thu, 07 Jul 2022 02:03:00 +0000
+
+suricata (6.0.5-0ubuntu4) jammy; urgency=medium
+
+  * Initial Release.
+
+ -- root <pmanev@oisf.net>  Tue, 26 Apr 2022 22:32:59 +0200
