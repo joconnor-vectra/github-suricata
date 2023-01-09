@@ -34,6 +34,7 @@
 #define SC_PCAP_DONT_INCLUDE_PCAP_H 1
 #include "suricata-common.h"
 #include "suricata.h"
+#include "packet.h"
 #include "decode.h"
 #include "packet-queue.h"
 #include "threads.h"
@@ -649,7 +650,7 @@ static void AFPWritePacket(Packet *p, int version)
     int socket;
 
     if (p->afp_v.copy_mode == AFP_COPY_MODE_IPS) {
-        if (PacketTestAction(p, ACTION_DROP)) {
+        if (PacketCheckAction(p, ACTION_DROP)) {
             return;
         }
     }

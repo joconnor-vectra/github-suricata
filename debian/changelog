@@ -1,18 +1,30 @@
-suricata (7.0.0-0vectra02) oop; urgency=medium
+suricata (7.0.0-0vectra04) stable; urgency=medium
+
+  * altered suricata default yaml
+
+ -- joconnor <joconnor@vectra.ai>  Tue, 08 Nov 2022 18:57:00 +0000
+
+suricata (7.0.0-0vectra03) stable; urgency=medium
+
+  * Merge in upstream suricata-7.0.0-beta1
+
+ -- joconnor <joconnor@vectra.ai>  Tue, 15 Nov 2022 21:37:00 +0000
+
+suricata (7.0.0-0vectra02) stable; urgency=medium
 
   * Add no-start to suricata service dh_installsystemd
 
  -- cfortman <cfortman@vectra.ai>  Thu, 13 Oct 2022 11:04:00 +0400
 
-suricata (7.0.0-0vectra01) oop; urgency=medium
+suricata (7.0.0-0vectra01) stable; urgency=medium
 
   * Initial packaging changes to suricata
 
  -- cfortman <cfortman@vectra.ai>  Tue, 04 Oct 2022 10:16:00 +0400
 
-suricata (7.0.0-0vectra0) oop; urgency=medium
+suricata (7.0.0-0vectra0) stable; urgency=medium
 
-  * Jack did this.
+  * Make initial changes to DPDK code in suricata.
 
  -- joconnor <joconnor@vectra.ai>  Thu, 07 Jul 2022 02:03:00 +0000
 

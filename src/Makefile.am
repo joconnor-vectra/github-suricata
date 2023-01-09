@@ -291,6 +291,7 @@ noinst_HEADERS = \
 	detect-sip-stat-code.h \
 	detect-sip-stat-msg.h \
 	detect-sip-uri.h \
+	detect-smb-ntlmssp.h \
 	detect-smb-share.h \
 	detect-snmp-community.h \
 	detect-snmp-pdu_type.h \
@@ -433,6 +434,7 @@ noinst_HEADERS = \
 	output-stats.h \
 	output-streaming.h \
 	output-tx.h \
+	packet.h \
 	packet-queue.h \
 	pkt-var.h \
 	queue.h \
@@ -476,6 +478,7 @@ noinst_HEADERS = \
 	source-windivert-prototypes.h \
 	stream.h \
 	stream-tcp.h \
+	stream-tcp-cache.h \
 	stream-tcp-inline.h \
 	stream-tcp-list.h \
 	stream-tcp-private.h \
@@ -893,6 +896,7 @@ libsuricata_c_a_SOURCES = \
 	detect-sip-stat-code.c \
 	detect-sip-stat-msg.c \
 	detect-sip-uri.c \
+	detect-smb-ntlmssp.c \
 	detect-smb-share.c \
 	detect-snmp-community.c \
 	detect-snmp-pdu_type.c \
@@ -1035,6 +1039,7 @@ libsuricata_c_a_SOURCES = \
 	output-stats.c \
 	output-streaming.c \
 	output-tx.c \
+	packet.c \
 	packet-queue.c \
 	pkt-var.c \
 	reputation.c \
@@ -1074,6 +1079,7 @@ libsuricata_c_a_SOURCES = \
 	source-windivert.c \
 	stream.c \
 	stream-tcp.c \
+	stream-tcp-cache.c \
 	stream-tcp-inline.c \
 	stream-tcp-list.c \
 	stream-tcp-reassemble.c \
@@ -1255,11 +1261,6 @@ EXTRA_DIST = \
 	tests/detect-tls-cert-subject.c \
 	tests/detect-tls-cert-validity.c \
 	tests/detect-tls-certs.c \
-	tests/detect-tls-ja3-hash.c \
-	tests/detect-tls-ja3-string.c \
-	tests/detect-tls-ja3s-hash.c \
-	tests/detect-tls-ja3s-string.c \
-	tests/detect-tls-sni.c \
 	tests/detect-tls-version.c \
 	tests/detect.c \
 	tests/stream-tcp.c

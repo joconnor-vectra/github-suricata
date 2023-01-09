@@ -290,8 +290,6 @@ Defrag4Reassemble(ThreadVars *tv, DefragTracker *tracker, Packet *p)
      * SCFree all the resources held by this tracker. */
     rp = PacketDefragPktSetup(p, NULL, 0, IPV4_GET_IPPROTO(p));
     if (rp == NULL) {
-        SCLogError(SC_ERR_MEM_ALLOC, "Failed to allocate packet for "
-                   "fragmentation re-assembly, dumping fragments.");
         goto error_remove_tracker;
     }
     PKT_SET_SRC(rp, PKT_SRC_DEFRAG);
@@ -429,8 +427,6 @@ Defrag6Reassemble(ThreadVars *tv, DefragTracker *tracker, Packet *p)
     rp = PacketDefragPktSetup(p, (uint8_t *)p->ip6h,
             IPV6_GET_PLEN(p) + sizeof(IPV6Hdr), 0);
     if (rp == NULL) {
-        SCLogError(SC_ERR_MEM_ALLOC, "Failed to allocate packet for "
-                "fragmentation re-assembly, dumping fragments.");
         goto error_remove_tracker;
     }
     PKT_SET_SRC(rp, PKT_SRC_DEFRAG);
@@ -1081,6 +1077,7 @@ void DefragDestroy(void)
 }
 
 #ifdef UNITTESTS
+#include "util-unittest-helper.h"
 #define IP_MF 0x2000
 
 /**
@@ -1100,7 +1097,7 @@ static Packet *BuildTestPacket(uint8_t proto, uint16_t id, uint16_t off, int mf,
     if (unlikely(p == NULL))
         return NULL;
 
-    PACKET_INITIALIZE(p);
+    PacketInit(p);
 
     gettimeofday(&p->ts, NULL);
     //p->ip4h = (IPV4Hdr *)GET_PKT_DATA(p);
@@ -1170,7 +1167,7 @@ static Packet *IPV6BuildTestPacket(uint8_t proto, uint32_t id, uint16_t off,
     if (unlikely(p == NULL))
         return NULL;
 
-    PACKET_INITIALIZE(p);
+    PacketInit(p);
 
     gettimeofday(&p->ts, NULL);
 

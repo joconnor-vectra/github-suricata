@@ -32,6 +32,8 @@
 
 #include "suricata-common.h"
 #include "runmodes.h"
+#include "decode.h"
+#include "packet.h"
 #include "source-dpdk.h"
 #include "suricata.h"
 #include "threads.h"
@@ -88,6 +90,7 @@ TmEcode NoDPDKSupportExit(ThreadVars *tv, const void *initdata, void **data)
 #include <numa.h>
 
 #define BURST_SIZE 32
+static struct timeval machine_start_time = { 0, 0 };
 
 /**
  * \brief Structure to hold thread specific variables.
@@ -120,7 +123,6 @@ typedef struct DPDKThreadVars_ {
     uint16_t queue_id;
     struct rte_mempool *pkt_mempool;
     struct rte_mbuf *received_mbufs[BURST_SIZE];
-    struct timeval machine_start_time;
 } DPDKThreadVars;
 
 static TmEcode ReceiveDPDKThreadInit(ThreadVars *, const void *, void **);
@@ -164,10 +166,10 @@ static void CyclesAddToTimeval(
     new_tv->tv_usec = (usec % 1000000);
 }
 
-static void DPDKSetTimevalOfMachineStart(struct timeval *tv)
+void DPDKSetTimevalOfMachineStart(void)
 {
-    gettimeofday(tv, NULL);
-    tv->tv_sec -= DPDKGetSeconds();
+    gettimeofday(&machine_start_time, NULL);
+    machine_start_time.tv_sec -= DPDKGetSeconds();
 }
 
 /**
@@ -300,7 +302,7 @@ static void DPDKReleasePacket(Packet *p)
        When enabling promiscuous mode on Intel cards, 2 ICMPv6 packets are generated.
        These get into the infinite cycle between the NIC and the switch in some cases */
     if ((p->dpdk_v.copy_mode == DPDK_COPY_MODE_TAP ||
-                (p->dpdk_v.copy_mode == DPDK_COPY_MODE_IPS && !PacketTestAction(p, ACTION_DROP)))
+                (p->dpdk_v.copy_mode == DPDK_COPY_MODE_IPS && !PacketCheckAction(p, ACTION_DROP)))
 #if defined(RTE_LIBRTE_I40E_PMD) || defined(RTE_LIBRTE_IXGBE_PMD) || defined(RTE_LIBRTE_ICE_PMD)
             && !(PKT_IS_ICMPV6(p) && p->icmpv6h->type == 143)
 #endif
@@ -372,7 +374,7 @@ static TmEcode ReceiveDPDKLoop(ThreadVars *tv, void *data, void *slot)
                 p->flags |= PKT_IGNORE_CHECKSUM;
             }
 
-            DPDKSetTimevalReal(&ptv->machine_start_time, &p->ts);
+            DPDKSetTimevalReal(&machine_start_time, &p->ts);
             p->dpdk_v.mbuf = ptv->received_mbufs[i];
             p->ReleasePacket = DPDKReleasePacket;
             p->dpdk_v.copy_mode = ptv->copy_mode;
@@ -430,7 +432,6 @@ static TmEcode ReceiveDPDKThreadInit(ThreadVars *tv, const void *initdata, void 
     ptv->pkts = 0;
     ptv->bytes = 0;
     ptv->livedev = LiveGetDevice(dpdk_config->iface);
-    DPDKSetTimevalOfMachineStart(&ptv->machine_start_time);
 
     ptv->capture_dpdk_packets = StatsRegisterCounter("capture.packets", ptv->tv);
     ptv->capture_dpdk_rx_errs = StatsRegisterCounter("capture.rx_errors", ptv->tv);

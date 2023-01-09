@@ -27,6 +27,7 @@
 #include "suricata-common.h"
 #include "suricata.h"
 #include "decode.h"
+#include "packet.h"
 #include "packet-queue.h"
 #include "threads.h"
 #include "threadvars.h"
@@ -528,7 +529,7 @@ TmEcode IPFWSetVerdict(ThreadVars *tv, IPFWThreadVars *ptv, Packet *p)
     IPFWpoll.events = POLLWRNORM;
 #endif
 
-    if (PacketTestAction(p, ACTION_DROP)) {
+    if (PacketCheckAction(p, ACTION_DROP)) {
         verdict = IPFW_DROP;
     } else {
         verdict = IPFW_ACCEPT;

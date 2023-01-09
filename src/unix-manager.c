@@ -22,8 +22,8 @@
  */
 
 #include "suricata-common.h"
-#include "suricata.h"
 #include "unix-manager.h"
+#include "threads.h"
 #include "detect-engine.h"
 #include "tm-threads.h"
 #include "runmodes.h"
@@ -32,12 +32,14 @@
 
 #include "output-json-stats.h"
 
+#include "util-conf.h"
 #include "util-privs.h"
 #include "util-debug.h"
 #include "util-device.h"
 #include "util-ebpf.h"
 #include "util-signal.h"
 #include "util-buffer.h"
+#include "util-path.h"
 
 #if (defined BUILD_UNIX_SOCKET) && (defined HAVE_SYS_UN_H) && (defined HAVE_SYS_STAT_H) && (defined HAVE_SYS_TYPES_H)
 #include <sys/un.h>
@@ -1084,6 +1086,8 @@ int UnixManagerInit(void)
 
     UnixManagerRegisterCommand("dataset-add", UnixSocketDatasetAdd, &command, UNIX_CMD_TAKE_ARGS);
     UnixManagerRegisterCommand("dataset-remove", UnixSocketDatasetRemove, &command, UNIX_CMD_TAKE_ARGS);
+    UnixManagerRegisterCommand(
+            "get-flow-stats-by-id", UnixSocketGetFlowStatsById, &command, UNIX_CMD_TAKE_ARGS);
 
     return 0;
 }

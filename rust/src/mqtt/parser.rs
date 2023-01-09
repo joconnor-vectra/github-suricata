@@ -51,10 +51,10 @@ fn convert_varint(continued: Vec<u8>, last: u8) -> u32 {
     let mut multiplier = 1u32;
     let mut value = 0u32;
     for val in &continued {
-        value = value + ((val & 127) as u32 * multiplier);
-        multiplier = multiplier * 128u32;
+        value += (val & 127) as u32 * multiplier;
+        multiplier *= 128u32;
     }
-    value = value + ((last & 127) as u32 * multiplier);
+    value += (last & 127) as u32 * multiplier;
     return value;
 }
 
@@ -114,7 +114,7 @@ fn parse_properties(input: &[u8], precond: bool) -> IResult<&[u8], Option<Vec<MQ
             // parse properties
             let mut props = Vec::<MQTTProperty>::new();
             let (rem, mut newrem) = take(proplen as usize)(rem)?;
-            while newrem.len() > 0 {
+            while !newrem.is_empty() {
                 match parse_property(newrem) {
                     Ok((rem2, val)) => {
                         props.push(val);

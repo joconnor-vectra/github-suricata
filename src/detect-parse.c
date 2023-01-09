@@ -719,7 +719,7 @@ static int SigParseOptions(DetectEngineCtx *de_ctx, Signature *s, char *optstr, 
     s->init_data->negated = false;
 
     if (st->flags & SIGMATCH_INFO_DEPRECATED) {
-#define URL "https://suricata-ids.org/about/deprecation-policy/"
+#define URL "https://suricata.io/our-story/deprecation-policy/"
         if (st->alternative == 0)
             SCLogWarning(SC_WARN_DEPRECATED, "keyword '%s' is deprecated "
                     "and will be removed soon. See %s", st->name, URL);
@@ -3603,7 +3603,7 @@ static int SigTestBidirec03 (void)
 
 end:
     if (p != NULL) {
-        PACKET_RECYCLE(p);
+        PacketRecycle(p);
         SCFree(p);
     }
     FlowShutdown();
@@ -3741,7 +3741,7 @@ static int SigTestBidirec04 (void)
     }
 
     if (p != NULL) {
-        PACKET_RECYCLE(p);
+        PacketRecycle(p);
     }
     FlowShutdown();
     DetectEngineThreadCtxDeinit(&th_v, (void *)det_ctx);

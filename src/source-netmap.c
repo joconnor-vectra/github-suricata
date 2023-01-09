@@ -37,6 +37,7 @@
 #include "suricata.h"
 #include "suricata-common.h"
 #include "tm-threads.h"
+#include "packet.h"
 #include "util-bpf.h"
 #include "util-privs.h"
 #include "util-validate.h"
@@ -604,7 +605,7 @@ error:
 static TmEcode NetmapWritePacket(NetmapThreadVars *ntv, Packet *p)
 {
     if (ntv->copy_mode == NETMAP_COPY_MODE_IPS) {
-        if (PacketTestAction(p, ACTION_DROP)) {
+        if (PacketCheckAction(p, ACTION_DROP)) {
             return TM_ECODE_OK;
         }
     }

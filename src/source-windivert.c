@@ -28,7 +28,7 @@
 #include "suricata-common.h"
 #include "suricata.h"
 #include "tm-threads.h"
-
+#include "packet.h"
 #include "util-byte.h"
 #include "util-debug.h"
 #include "util-device.h"
@@ -789,7 +789,7 @@ static TmEcode WinDivertVerdictHelper(ThreadVars *tv, Packet *p)
 
     /* DROP simply means we do nothing; the WinDivert driver does the rest.
      */
-    if (PacketTestAction(p, ACTION_DROP)) {
+    if (PacketCheckAction(p, ACTION_DROP)) {
 #ifdef COUNTERS
         SCMutexLock(&wd_qv->counters_mutex);
         wd_qv->dropped++;

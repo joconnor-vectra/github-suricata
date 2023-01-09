@@ -514,7 +514,7 @@ fn dns_log_json_answer(js: &mut JsonBuilder, response: &DNSResponse, flags: u64)
     }
     js.set_string("rcode", &dns_rcode_string(header.flags))?;
 
-    if response.answers.len() > 0 {
+    if !response.answers.is_empty() {
         let mut js_answers = JsonBuilder::new_array();
 
         // For grouped answers we use a HashMap keyed by the rrtype.
@@ -601,7 +601,7 @@ fn dns_log_json_answer(js: &mut JsonBuilder, response: &DNSResponse, flags: u64)
 
     }
 
-    if response.authorities.len() > 0 {
+    if !response.authorities.is_empty() {
         js.open_array("authorities")?;
         for auth in &response.authorities {
             let auth_detail = dns_log_json_answer_detail(auth)?;
@@ -659,13 +659,13 @@ pub extern "C" fn rs_dns_log_json_query(tx: &mut DNSTransaction,
 
 #[no_mangle]
 pub extern "C" fn rs_dns_log_json_answer(tx: &mut DNSTransaction,
-                                         flags: u64, mut js: &mut JsonBuilder)
+                                         flags: u64, js: &mut JsonBuilder)
                                          -> bool
 {
     if let &Some(ref response) = &tx.response {
         for query in &response.queries {
             if dns_log_rrtype_enabled(query.rrtype, flags) {
-                return dns_log_json_answer(&mut js, response, flags as u64).is_ok();
+                return dns_log_json_answer(js, response, flags as u64).is_ok();
             }
         }
     }

@@ -1,4 +1,4 @@
-    AC_INIT([suricata],[7.0.0-dev])
+    AC_INIT([suricata],[7.0.0-beta1])
     m4_ifndef([AM_SILENT_RULES], [m4_define([AM_SILENT_RULES],[])])AM_SILENT_RULES([yes])
     AC_CONFIG_HEADERS([src/autoconf.h])
     AC_CONFIG_SRCDIR([src/suricata.c])
@@ -1321,12 +1321,6 @@
         fi
 
         AC_DEFINE([HAVE_DPDK],[1],(DPDK support enabled))
-        PKG_CHECK_EXISTS(libdpdk >= 20.11, [pkgconfig_libdpdk_above20=yes], )
-        if test "$pkgconfig_libdpdk_above20" = "yes"; then
-            AC_DEFINE([HAVE_STRLCAT],[1],[STRLCAT is predefined by DPDK 20.11+])
-            AC_DEFINE([HAVE_STRLCPY],[1],[STRLCPY is predefined by DPDK 20.11+])
-        fi
-
         PKG_CHECK_EXISTS(libdpdk >= 19.11, , [with_pkgconfig_libdpdk=no])
         if test "$with_pkgconfig_libdpdk" = "no"; then
             echo
@@ -2159,7 +2153,7 @@ fi
     AC_PATH_PROG(RUSTC, rustc, "no")
     if test "$RUSTC" = "no"; then
         echo ""
-        echo "    ERROR: Suricata now requires Rust to build."
+        echo "    ERROR: Rust compiler not found."
         echo ""
         echo "    Ubuntu/Debian: apt install rustc cargo"
         echo "    Fedora: dnf install rustc cargo"
